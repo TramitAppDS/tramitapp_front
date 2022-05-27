@@ -1,13 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import { NavLink } from "react-router-dom";
 
-
-const Navbar = () => {
+function Navbar() {
   return (
     <nav className="navbar is-primary" role="navigation" aria-label="main navigation">
-      <div class="navbar-brand">
-        <a class="navbar-item" href="/home">
-          <img src="logo.png" width="112" height="28"/>
+      <div className="navbar-brand">
+        <a className="navbar-item" href="/home">
+          <img alt="" src="logo.png" width="112" height="28" />
         </a>
       </div>
       <div className="navbar-start">
@@ -16,9 +15,24 @@ const Navbar = () => {
         </NavLink>
 
         <NavLink className="navbar-item" activeClassName="is-active" to="/profile">
-        <strong>Perfil</strong>
+          <strong>Perfil</strong>
         </NavLink>
 
+        <NavLink className="navbar-item" activeClassName="is-active" to="/sign-in">
+          <strong>Ingresar</strong>
+        </NavLink>
+
+        <NavLink className="navbar-item" activeClassName="is-active" to="/sign-up">
+          <strong>Registrarse</strong>
+        </NavLink>
+
+        <NavLink className="navbar-item" activeClassName="is-active" to="/tramiter-sign-in">
+          <strong>Comenzar a Tramitar</strong>
+        </NavLink>
+
+        <NavLink className="navbar-item" activeClassName="is-active" to="/tramiter-sign-up">
+          <strong>Crear cuenta Traimter</strong>
+        </NavLink>
       </div>
 
       <div className="navbar-end">
@@ -30,6 +44,6 @@ const Navbar = () => {
       </div>
     </nav>
   );
-};
+}
 
 export default Navbar;

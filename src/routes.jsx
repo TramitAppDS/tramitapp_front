@@ -5,7 +5,7 @@ import UserSignInPage from "./layouts/user/sign-in";
 import UserSignUpPage from "./layouts/user/sign-up";
 import TramiterSignInPage from "./layouts/tramiter/sign-in";
 import TramiterSignUpPage from "./layouts/tramiter/sign-up";
-import Profile from './views/Profile';
+import Profile from "./views/Profile";
 import NotFound from "./views/NotFound";
 
 export default function Router() {
