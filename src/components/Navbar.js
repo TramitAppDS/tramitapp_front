@@ -3,7 +3,6 @@ import { NavLink } from "react-router-dom";
 
 
 const Navbar = () => {
-  const [isOpen, setOpen] = useState(false);
   return (
     <nav className="navbar is-primary" role="navigation" aria-label="main navigation">
       <div className="navbar-start">
@@ -19,9 +18,9 @@ const Navbar = () => {
 
       <div className="navbar-end">
         <div className="navbar-item">
-          <div className="buttons">
-            <a className="button is-white">Log in</a>
-          </div>
+          <NavLink className="button is-white" activeClassName="is-active" to="/home">
+            <strong>Realizar tramite</strong>
+          </NavLink>
         </div>
       </div>
     </nav>
