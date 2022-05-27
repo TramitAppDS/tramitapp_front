@@ -5,6 +5,11 @@ import { NavLink } from "react-router-dom";
 const Navbar = () => {
   return (
     <nav className="navbar is-primary" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="/home">
+          <img src="logo.png" width="112" height="28"/>
+        </a>
+      </div>
       <div className="navbar-start">
         <NavLink className="navbar-item" activeClassName="is-active" to="/home">
           <strong>Inicio</strong>
