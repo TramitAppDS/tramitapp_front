@@ -47,6 +47,7 @@ export default function SolicitarTramite() {
                 labelId="demo-simple-select-standard-label"
                 id="demo-simple-select-standard"
                 label="Tipo"
+                required
               >
                 <MenuItem value={"revision_tecnica"}>Revisión Técnica</MenuItem>
                 <MenuItem value={"permiso_circulacion"}>Permiso de Circulación</MenuItem>
@@ -58,6 +59,8 @@ export default function SolicitarTramite() {
               required
               fullWidth
               id="comentario"
+              multiline
+              rows={4}
               label="Comentario"
               name="comentario"
               autoComplete="comentario"
