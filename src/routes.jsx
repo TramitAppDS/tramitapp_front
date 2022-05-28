@@ -7,6 +7,7 @@ import TramiterSignInPage from "./layouts/tramiter/sign-in";
 import TramiterSignUpPage from "./layouts/tramiter/sign-up";
 import Profile from "./views/Profile";
 import NotFound from "./views/NotFound";
+import SolicitarTramite from "./views/SolicitarTramite";
 
 export default function Router() {
   return (
@@ -19,6 +20,7 @@ export default function Router() {
       <Route path="/sign-up" element={<UserSignUpPage />} />
       <Route path="/tramiter-sign-in" element={<TramiterSignInPage />} />
       <Route path="/tramiter-sign-up" element={<TramiterSignUpPage />} />
+      <Route path="/solicitar-tramite" element={<SolicitarTramite />} />
     </Routes>
   );
 }

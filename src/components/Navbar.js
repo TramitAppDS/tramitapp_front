@@ -33,6 +33,10 @@ function Navbar() {
         <NavLink className="navbar-item" activeClassName="is-active" to="/tramiter-sign-up">
           <strong>Crear cuenta Traimter</strong>
         </NavLink>
+
+        <NavLink className="navbar-item" activeClassName="is-active" to="/solicitar-tramite">
+          <strong>Solicitar Trámite</strong>
+        </NavLink>
       </div>
 
       <div className="navbar-end">
