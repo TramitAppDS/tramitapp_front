@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useCallback } from "react";
 import jwtDecode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-import useLocalStorage from "../hooks/UseLocalStorage";
+import useLocalStorage from "hooks/UseLocalStorage";
 
 let logoutTimer;
 

@@ -13,7 +13,7 @@ import MonetizationOnRoundedIcon from "@mui/icons-material/MonetizationOnRounded
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import useAuth from "../../hooks/useAuth";
+import useAuth from "hooks/useAuth";
 
 const theme = createTheme();
 
