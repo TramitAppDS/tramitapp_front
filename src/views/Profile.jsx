@@ -1,10 +1,16 @@
 import React from "react";
+import useAuth from "../hooks/useAuth";
 
 export default function Profile() {
+  const { currentUser } = useAuth();
+
   return (
     <div style={{ textAlign: "center" }}>
       <br />
-      <h1 className="title is-2"> Perfil de nombre </h1>
+      <h1 className="title is-2">
+        {" "}
+        {currentUser.firstName} {currentUser.lastName}{" "}
+      </h1>
       <p>
         <img
           alt=""
