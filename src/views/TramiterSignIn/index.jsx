@@ -1,4 +1,5 @@
-import * as React from "react";
+import React, { useState } from "react";
+import { Navigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -12,23 +13,57 @@ import MonetizationOnRoundedIcon from "@mui/icons-material/MonetizationOnRounded
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import useAuth from "../../hooks/useAuth";
 
 const theme = createTheme();
 
 export default function SignIn() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    // Borrar Después, está solo para que no webee el linter
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+  const { currentUser, handleUserLogin } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleSubmit = async (event) => {
+    try {
+      setLoading(true);
+      event.preventDefault();
+      const data = new FormData(event.currentTarget);
+      const object = {};
+      data.forEach((value, key) => {
+        object[key] = value;
+      });
+      const body = JSON.stringify(object);
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body,
+      };
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/auth/login/tramiter`,
+        requestOptions
+      );
+      if (!response.ok) {
+        const error = await response.text();
+        throw new Error(error);
+      }
+      const user = await response.json();
+      user.type = "tramiter";
+      handleUserLogin(user);
+    } catch (error) {
+      setErrorMessage(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
+  if (loading) {
+    return <h2>Loading...</h2>;
+  }
+
+  if (currentUser) return <Navigate to="/home" />;
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
+        <p>{errorMessage}</p>
         <CssBaseline />
         <Box
           sx={{
