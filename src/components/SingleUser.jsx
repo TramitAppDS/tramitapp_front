@@ -1,12 +1,13 @@
-/* eslint-disable react/prop-types */
+import { Link } from "react-router-dom";
 import React, { useState, useEffect } from "react";
+import useAuth from "../hooks/useAuth";
 
-import Procedure from "./Procedure";
-
-export default function MyProcedures({ currentUser }) {
-  const [procedures, setProcedures] = useState([]);
+function SingleUser(prop) {
+  const { id } = prop;
+  const [user, setUser] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [setError] = useState(false);
+  const { currentUser } = useAuth();
 
   useEffect(() => {
     setLoading(true);
@@ -16,15 +17,16 @@ export default function MyProcedures({ currentUser }) {
         Authorization: `Bearer ${currentUser?.access_token}`,
       },
     };
-    fetch(`${process.env.REACT_APP_API_URL}/procedures`, requestOptions)
+    fetch(`${process.env.REACT_APP_API_URL}/users/${id}`, requestOptions)
       .then((response) => {
         if (response.status !== 200) {
+          setError(true);
           return [];
         }
         return response.json();
       })
-      .then(setProcedures)
-      .catch(setErrorMessage)
+      .then(setUser)
+      .catch(() => setError(true))
       .finally(() => setLoading(false));
   }, []);
 
@@ -33,12 +35,10 @@ export default function MyProcedures({ currentUser }) {
   }
 
   return (
-    <div>
-      <p>{errorMessage}</p>
-      <h1> Tramites: </h1>
-      {procedures.map((procedure) => (
-        <Procedure procedure={procedure} />
-      ))}
-    </div>
+    <Link to={`/user/${user.id}`}>
+      {user.firstName} {user.lastName}
+    </Link>
   );
 }
+
+export default SingleUser;
