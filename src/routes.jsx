@@ -1,13 +1,14 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import Home from "./views/Home";
-import UserSignInPage from "./layouts/user/sign-in";
-import UserSignUpPage from "./layouts/user/sign-up";
-import TramiterSignInPage from "./layouts/tramiter/sign-in";
-import TramiterSignUpPage from "./layouts/tramiter/sign-up";
-import Profile from "./views/Profile";
-import NotFound from "./views/NotFound";
-import AuthContextProvider from "./contexts/AuthContext";
+import Home from "views/Home";
+import UserSignInPage from "layouts/user/sign-in";
+import UserSignUpPage from "layouts/user/sign-up";
+import TramiterSignInPage from "layouts/tramiter/sign-in";
+import TramiterSignUpPage from "layouts/tramiter/sign-up";
+import AvailableProceduresPage from "layouts/procedures/available-procedures";
+import Profile from "views/Profile";
+import NotFound from "views/NotFound";
+import AuthContextProvider from "contexts/AuthContext";
 
 export default function Router() {
   return (
@@ -21,6 +22,7 @@ export default function Router() {
         <Route path="/sign-up" element={<UserSignUpPage />} />
         <Route path="/tramiter-sign-in" element={<TramiterSignInPage />} />
         <Route path="/tramiter-sign-up" element={<TramiterSignUpPage />} />
+        <Route path="/available-procedures" element={<AvailableProceduresPage />} />
       </Routes>
     </AuthContextProvider>
   );
