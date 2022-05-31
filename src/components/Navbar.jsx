@@ -25,7 +25,7 @@ function Navbar() {
         <NavLink className="navbar-item" activeClassName="is-active" to="/tramiter-procedures">
           <strong>Mis Trámites</strong>
         </NavLink>
-
+    
         <NavLink className="navbar-item" activeClassName="is-active" to="/sign-in">
           <strong>Ingresar</strong>
         </NavLink>
