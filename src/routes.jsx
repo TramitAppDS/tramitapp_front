@@ -9,6 +9,7 @@ import AvailableProceduresPage from "layouts/procedures/available-procedures";
 import Profile from "views/Profile";
 import NotFound from "views/NotFound";
 import AuthContextProvider from "contexts/AuthContext";
+import SolicitarTramite from "./views/SolicitarTramite";
 
 export default function Router() {
   return (
@@ -23,6 +24,7 @@ export default function Router() {
         <Route path="/tramiter-sign-in" element={<TramiterSignInPage />} />
         <Route path="/tramiter-sign-up" element={<TramiterSignUpPage />} />
         <Route path="/available-procedures" element={<AvailableProceduresPage />} />
+         <Route path="/solicitar-tramite" element={<SolicitarTramite />} />
       </Routes>
     </AuthContextProvider>
   );
