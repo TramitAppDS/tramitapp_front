@@ -1,7 +1,11 @@
 import React from "react";
+import Button from "@mui/material/Button";
 import { NavLink } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
 function Navbar() {
+  const { currentUser, handleUserLogout } = useAuth();
+
   return (
     <nav className="navbar is-primary" role="navigation" aria-label="main navigation">
       <div className="navbar-brand">
@@ -26,6 +30,10 @@ function Navbar() {
           <strong>Registrarse</strong>
         </NavLink>
 
+        <NavLink className="navbar-item" activeClassName="is-active" to="/request-procedure">
+          <strong>Solicitar Tramite</strong>
+        </NavLink>
+
         <NavLink className="navbar-item" activeClassName="is-active" to="/tramiter-sign-in">
           <strong>Comenzar a Tramitar</strong>
         </NavLink>
@@ -34,12 +42,17 @@ function Navbar() {
           <strong>Crear cuenta Traimter</strong>
         </NavLink>
       </div>
-
       <div className="navbar-end">
         <div className="navbar-item">
-          <NavLink className="button is-white" activeClassName="is-active" to="/home">
-            <strong>Realizar tramite</strong>
-          </NavLink>
+          {currentUser && (
+            <Button
+              className="button is-white"
+              activeClassName="is-active"
+              onClick={handleUserLogout}
+            >
+              Cerrar sesion
+            </Button>
+          )}
         </div>
       </div>
     </nav>
