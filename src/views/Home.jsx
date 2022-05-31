@@ -1,4 +1,5 @@
 import React from "react";
+import { Navigate } from "react-router-dom";
 import useAuth from "hooks/useAuth";
 
 import AvailableProceduresPage from "layouts/procedures/available-procedures";
@@ -6,6 +7,8 @@ import UserProceduresPage from "layouts/user/my-procedures";
 
 export default function home() {
   const { currentUser } = useAuth();
+
+  if (!currentUser) return <Navigate to="/sign-in" />;
 
   return (
     <div>
