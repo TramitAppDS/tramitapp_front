@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import useAuth from "../hooks/useAuth";
 
@@ -35,9 +34,9 @@ function SingleUser(prop) {
   }
 
   return (
-    <Link to={`/user/${user.id}`}>
+    <p>
       {user.firstName} {user.lastName}
-    </Link>
+    </p>
   );
 }
 
