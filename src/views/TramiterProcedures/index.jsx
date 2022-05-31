@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from "react";
+import { Navigate } from "react-router-dom";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -12,7 +13,7 @@ import TablePagination from "@mui/material/TablePagination";
 import Paper from "@mui/material/Paper";
 import useAuth from "hooks/useAuth";
 import SingleUser from "components/SingleUser";
-import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import PropTypes from "prop-types";
 import { useTheme } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
@@ -96,15 +97,15 @@ export default function BasicTable() {
     setPage(0);
   };
 
-  const handleAddClick = async (procedureId) => {
+  const handleTrashClick = async (procedureId) => {
     const requestOptions = {
-      method: "PATCH",
+      method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${currentUser?.access_token}`,
       },
     };
-    fetch(`${process.env.REACT_APP_API_URL}/procedures/accept/${procedureId}`, requestOptions)
+    fetch(`${process.env.REACT_APP_API_URL}/procedures/${procedureId}`, requestOptions)
       .then((response) => {
         if (response.status !== 200) {
           return [];
@@ -123,7 +124,7 @@ export default function BasicTable() {
         Authorization: `Bearer ${currentUser?.access_token}`,
       },
     };
-    fetch(`${process.env.REACT_APP_API_URL}/procedures/null/tramiter`, requestOptions)
+    fetch(`${process.env.REACT_APP_API_URL}/procedures/tramiter/${currentUser?.id}`, requestOptions)
       .then((response) => {
         if (response.status !== 200) {
           return [];
@@ -139,6 +140,10 @@ export default function BasicTable() {
 
   if (loading) {
     return <h2>Loading...</h2>;
+  }
+
+  if (!currentUser) {
+    return <Navigate to="/home" />;
   }
 
   return (
@@ -176,9 +181,9 @@ export default function BasicTable() {
                     <button
                       type="button"
                       className="btn-icon"
-                      onClick={() => handleAddClick(procedure.id)}
+                      onClick={() => handleTrashClick(procedure.id)}
                     >
-                      <AddCircleOutlineOutlinedIcon />
+                      <DeleteOutlineOutlinedIcon />
                     </button>
                   </form>
                 </TableCell>
