@@ -123,7 +123,7 @@ export default function BasicTable() {
         Authorization: `Bearer ${currentUser?.access_token}`,
       },
     };
-    fetch(`${process.env.REACT_APP_API_URL}/procedures`, requestOptions)
+    fetch(`${process.env.REACT_APP_API_URL}/procedures/tramiter/${currentUser?.id}`, requestOptions)
       .then((response) => {
         if (response.status !== 200) {
           return [];
