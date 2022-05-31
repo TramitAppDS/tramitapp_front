@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from "react";
+import { Navigate } from "react-router-dom";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -139,6 +140,10 @@ export default function BasicTable() {
 
   if (loading) {
     return <h2>Loading...</h2>;
+  }
+
+  if (!currentUser) {
+    return <Navigate to="/home" />;
   }
 
   return (
