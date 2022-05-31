@@ -1,7 +1,8 @@
 import React from "react";
-import useAuth from "../hooks/useAuth";
+import useAuth from "hooks/useAuth";
 
-import MyProcedures from "../components/MyProcedures";
+import AvailableProceduresPage from "layouts/procedures/available-procedures";
+import UserProceduresPage from "layouts/user/my-procedures";
 
 export default function home() {
   const { currentUser, handleUserLogout } = useAuth();
@@ -15,7 +16,8 @@ export default function home() {
           <button type="button" onClick={handleUserLogout}>
             Logout
           </button>
-          {currentUser.type === "user" && <MyProcedures currentUser={currentUser} />}
+          {currentUser.type === "user" && <UserProceduresPage currentUser={currentUser} />}
+          {currentUser.type === "tramiter" && <AvailableProceduresPage currentUser={currentUser} />}
         </h4>
       )}
     </div>

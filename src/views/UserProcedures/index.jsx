@@ -12,7 +12,7 @@ import TablePagination from "@mui/material/TablePagination";
 import Paper from "@mui/material/Paper";
 import useAuth from "hooks/useAuth";
 import SingleUser from "components/SingleUser";
-import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import PropTypes from "prop-types";
 import { useTheme } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
@@ -96,15 +96,15 @@ export default function BasicTable() {
     setPage(0);
   };
 
-  const handleAddClick = async (procedureId) => {
+  const handleTrashClick = async (procedureId) => {
     const requestOptions = {
-      method: "PATCH",
+      method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${currentUser?.access_token}`,
       },
     };
-    fetch(`${process.env.REACT_APP_API_URL}/procedures/accept/${procedureId}`, requestOptions)
+    fetch(`${process.env.REACT_APP_API_URL}/procedures/${procedureId}`, requestOptions)
       .then((response) => {
         if (response.status !== 200) {
           return [];
@@ -123,7 +123,7 @@ export default function BasicTable() {
         Authorization: `Bearer ${currentUser?.access_token}`,
       },
     };
-    fetch(`${process.env.REACT_APP_API_URL}/procedures/tramiter/null`, requestOptions)
+    fetch(`${process.env.REACT_APP_API_URL}/procedures/user/${currentUser?.id}`, requestOptions)
       .then((response) => {
         if (response.status !== 200) {
           return [];
@@ -176,9 +176,9 @@ export default function BasicTable() {
                     <button
                       type="button"
                       className="btn-icon"
-                      onClick={() => handleAddClick(procedure.id)}
+                      onClick={() => handleTrashClick(procedure.id)}
                     >
-                      <AddCircleOutlineOutlinedIcon />
+                      <DeleteOutlineOutlinedIcon />
                     </button>
                   </form>
                 </TableCell>
