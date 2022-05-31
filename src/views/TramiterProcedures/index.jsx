@@ -98,8 +98,10 @@ export default function BasicTable() {
   };
 
   const handleTrashClick = async (procedureId) => {
+    const body = { tramiterId: null };
     const requestOptions = {
-      method: "DELETE",
+      method: "PATCH",
+      body: JSON.stringify(body),
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${currentUser?.access_token}`,
