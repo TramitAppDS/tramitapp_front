@@ -54,7 +54,7 @@ function Navbar() {
             </NavLink>
 
             <NavLink className="navbar-item" activeClassName="is-active" to="/tramiter-sign-up">
-              <strong>Crear cuenta Traimter</strong>
+              <strong>Crear cuenta Tramiter</strong>
             </NavLink>
           </>
         )}
