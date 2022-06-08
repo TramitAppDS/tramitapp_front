@@ -4,7 +4,7 @@ import useAuth from "hooks/useAuth";
 
 export default function ProcedureInfo({ procedure }) {
   const { currentUser } = useAuth();
-  const [tramiter, setTramiter] = useState(0);
+  const [tramiter, setTramiter] = useState(null);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -16,10 +16,10 @@ export default function ProcedureInfo({ procedure }) {
         Authorization: `Bearer ${currentUser?.access_token}`,
       },
     };
-    fetch(`${process.env.REACT_APP_API_URL}/users/${procedure.tramiterId}`, requestOptions)
+    fetch(`${process.env.REACT_APP_API_URL}/tramiters/${procedure.tramiterId}`, requestOptions)
       .then((response) => {
         if (response.status !== 200) {
-          return 0;
+          return null;
         }
         return response.json();
       })
@@ -37,30 +37,53 @@ export default function ProcedureInfo({ procedure }) {
   return (
     <div style={{ textAlign: "center" }}>
       <br />
-      <h1 className="title is-2">
-        {" "}
-        {tramiter.firstName} {tramiter.lastName}{" "}
-      </h1>
+      {!tramiter && <h1 className="title is-2">Conectando con un Tramiter...</h1>}
 
+      {tramiter !== null && (
+        <>
+          <h1 className="title is-2">
+            {" "}
+            {tramiter.firstName} {tramiter.lastName}{" "}
+          </h1>
+          <p className="is-size-5">
+            <strong>Calificación: </strong>
+            {tramiter.rating ? tramiter.rating : "El Tramiter no ha sido calificado"}
+          </p>
+          <p className="is-size-5">
+            <strong>Telefono: </strong>
+            {tramiter.phone}
+          </p>
+          <p className="is-size-5">
+            <strong>Email: </strong>
+            {tramiter.email}
+          </p>
+          <p className="is-size-5">
+            <strong>Ciudad: </strong>
+            {tramiter.city}
+          </p>
+          <p className="is-size-5">
+            <strong>Comuna: </strong>
+            {tramiter.commune}
+          </p>
+        </>
+      )}
+      <br />
+      <h1 className="title is-2">Estado actual del trámite:</h1>
       <p className="is-size-5">
-        <strong>Calificación: </strong>
-        {tramiter.rating}
+        <strong>Status: </strong>
+        {procedure.status}
       </p>
       <p className="is-size-5">
-        <strong>Telefono: </strong>
-        {tramiter.phone}
+        <strong>Tipo: </strong>
+        {procedure.type}
       </p>
       <p className="is-size-5">
-        <strong>Email: </strong>
-        {tramiter.email}
+        <strong>Comentarios: </strong>
+        {procedure.comments}
       </p>
       <p className="is-size-5">
-        <strong>Ciudad: </strong>
-        {tramiter.city}
-      </p>
-      <p className="is-size-5">
-        <strong>Comuna: </strong>
-        {tramiter.commune}
+        <strong>Precio: </strong>
+        {procedure.price}
       </p>
     </div>
   );
