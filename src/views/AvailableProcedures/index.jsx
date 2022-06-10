@@ -172,15 +172,13 @@ export default function BasicTable() {
                 <TableCell align="right">{procedure.status}</TableCell>
                 <TableCell align="right">{procedure.type}</TableCell>
                 <TableCell align="right">
-                  <form>
-                    <button
-                      type="button"
-                      className="btn-icon"
-                      onClick={() => handleAddClick(procedure.id)}
-                    >
-                      <AddCircleOutlineOutlinedIcon />
-                    </button>
-                  </form>
+                  <button
+                    type="button"
+                    className="btn-icon"
+                    onClick={() => handleAddClick(procedure.id)}
+                  >
+                    <AddCircleOutlineOutlinedIcon />
+                  </button>
                 </TableCell>
               </TableRow>
             ))}
