@@ -119,7 +119,7 @@ export default function BasicTable() {
   };
 
   function handleProcedureClick(procedure) {
-    navigate("/procedure-info", {
+    navigate("/user-procedure-info", {
       state: { procedure },
     });
   }

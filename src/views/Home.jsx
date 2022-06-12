@@ -17,9 +17,13 @@ export default function home() {
       {currentUser && (
         <h4>
           Hello {currentUser.firstName} {currentUser.type}
-          {(currentUser.type === "user" && !(currentUser.admin)) && <UserProceduresPage currentUser={currentUser} />}
+          {currentUser.type === "user" && !currentUser.admin && (
+            <UserProceduresPage currentUser={currentUser} />
+          )}
           {currentUser.type === "tramiter" && <AvailableProceduresPage currentUser={currentUser} />}
-          {(currentUser.type === "user" && currentUser.admin) && <PendingTramitersPage currentUser={currentUser} />}
+          {currentUser.type === "user" && currentUser.admin && (
+            <PendingTramitersPage currentUser={currentUser} />
+          )}
         </h4>
       )}
     </div>

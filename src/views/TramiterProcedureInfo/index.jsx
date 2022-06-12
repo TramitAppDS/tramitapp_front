@@ -9,11 +9,10 @@ import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 
-export default function ProcedureInfo(prop) {
+export default function TramiterProcedureInfo(prop) {
   const { procedure } = prop;
   const { currentUser } = useAuth();
-  // const navigate = useNavigate();
-  const [tramiter, setTramiter] = useState(null);
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const [select, setSelect] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -26,14 +25,14 @@ export default function ProcedureInfo(prop) {
         Authorization: `Bearer ${currentUser?.access_token}`,
       },
     };
-    fetch(`${process.env.REACT_APP_API_URL}/tramiters/${procedure.tramiterId}`, requestOptions)
+    fetch(`${process.env.REACT_APP_API_URL}/users/${procedure.userId}`, requestOptions)
       .then((response) => {
         if (response.status !== 200) {
           return null;
         }
         return response.json();
       })
-      .then(setTramiter)
+      .then(setUser)
       .catch(setErrorMessage)
       .finally(() => setLoading(false));
   }, []);
@@ -55,7 +54,7 @@ export default function ProcedureInfo(prop) {
       },
       body,
     };
-    fetch(`${process.env.REACT_APP_API_URL}/procedures/rating/${procedure.id}`, requestOptions)
+    fetch(`${process.env.REACT_APP_API_URL}/procedures/avance/${procedure.id}`, requestOptions)
       .then((response) => {
         if (response.status !== 200) {
           return [];
@@ -73,38 +72,21 @@ export default function ProcedureInfo(prop) {
   // eslint-disable-next-line no-console
   console.log(errorMessage);
 
-  if (procedure.userId !== currentUser.id) return <Navigate to="/home" />;
+  if (currentUser.type !== "tramiter") return <Navigate to="/home" />;
+  if (procedure.tramiterId !== currentUser.id) return <Navigate to="/home" />;
 
   return (
     <div style={{ textAlign: "center" }}>
       <br />
-      {!tramiter && <h1 className="title is-2">Conectando con un Tramiter...</h1>}
-
-      {tramiter !== null && (
+      {user !== null && (
         <>
           <h1 className="title is-2">
             {" "}
-            {tramiter.firstName} {tramiter.lastName}{" "}
+            {user.firstName} {user.lastName}{" "}
           </h1>
           <p className="is-size-5">
-            <strong>Calificación: </strong>
-            {tramiter.rating ? tramiter.rating : "El Tramiter no ha sido calificado"}
-          </p>
-          <p className="is-size-5">
-            <strong>Telefono: </strong>
-            {tramiter.phone}
-          </p>
-          <p className="is-size-5">
             <strong>Email: </strong>
-            {tramiter.email}
-          </p>
-          <p className="is-size-5">
-            <strong>Ciudad: </strong>
-            {tramiter.city}
-          </p>
-          <p className="is-size-5">
-            <strong>Comuna: </strong>
-            {tramiter.commune}
+            {user.email}
           </p>
         </>
       )}
@@ -115,50 +97,37 @@ export default function ProcedureInfo(prop) {
         {procedure.status}
       </p>
       <p className="is-size-5">
-        {procedure.status === 2 && !(procedure.rating >= 0) ? (
+        {procedure.status !== 2 && (
           <>
-            <div>Tramite completado </div>
+            <div>Reportar avance </div>
             <div>
               <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                 <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                  <InputLabel id="demo-simple-select-standard-label">Rating</InputLabel>
+                  <InputLabel id="demo-simple-select-standard-label">Estado del trámite</InputLabel>
                   <Select
                     labelId="demo-simple-select-standard-label"
-                    id="rating"
-                    name="rating"
-                    label="Rating"
+                    id="status"
+                    name="status"
+                    label="Status"
                     onChange={() => setSelect(true)}
                     required
                   >
-                    <MenuItem value={0}>0</MenuItem>
-                    <MenuItem value={0.5}>0.5</MenuItem>
-                    <MenuItem value={1}>1</MenuItem>
-                    <MenuItem value={1.5}>1.5</MenuItem>
-                    <MenuItem value={2}>2</MenuItem>
-                    <MenuItem value={2.5}>2.5</MenuItem>
-                    <MenuItem value={3}>3</MenuItem>
-                    <MenuItem value={3.5}>3.5</MenuItem>
-                    <MenuItem value={4}>4</MenuItem>
-                    <MenuItem value={4.5}>4.5</MenuItem>
-                    <MenuItem value={5}>5.0</MenuItem>
+                    {procedure.status === 0 && (
+                      <>
+                        <MenuItem value={1}>1</MenuItem>
+                        <MenuItem value={2}>2</MenuItem>
+                      </>
+                    )}
+                    {procedure.status === 1 && <MenuItem value={2}>2</MenuItem>}
                   </Select>
                 </FormControl>
                 <Button disabled={!select} type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
-                  Calificar
+                  Reportar
                 </Button>
               </Box>
             </div>
           </>
-        ) : (
-          <p className="is-size-5">
-            <strong>Rating: </strong>
-            {procedure.rating}
-          </p>
         )}
-      </p>
-      <p className="is-size-5">
-        <strong>Tipo: </strong>
-        {procedure.type}
       </p>
       <p className="is-size-5">
         <strong>Comentarios: </strong>

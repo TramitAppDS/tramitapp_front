@@ -9,7 +9,8 @@ import TramiterProceduresPage from "layouts/tramiter/my-procedures";
 import Profile from "views/Profile";
 import NotFound from "views/NotFound";
 import SolicitarTramite from "views/SolicitarTramite";
-import ProcedureInfoPage from "layouts/procedures/procedure-info";
+import UserProcedureInfoPage from "layouts/user/procedure-info";
+import TramiterProcedureInfoPage from "layouts/tramiter/procedure-info";
 
 export default function Router() {
   return (
@@ -24,7 +25,8 @@ export default function Router() {
       <Route path="/tramiter-sign-up" element={<TramiterSignUpPage />} />
       <Route path="/request-procedure" element={<SolicitarTramite />} />
       <Route path="/tramiter-procedures" element={<TramiterProceduresPage />} />
-      <Route path="/procedure-info" element={<ProcedureInfoPage />} />
+      <Route path="/user-procedure-info" element={<UserProcedureInfoPage />} />
+      <Route path="/tramiter-procedure-info" element={<TramiterProcedureInfoPage />} />
     </Routes>
   );
 }

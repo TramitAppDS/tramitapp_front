@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -19,8 +18,8 @@ import FirstPageIcon from "@mui/icons-material/FirstPage";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CancelIcon from '@mui/icons-material/Cancel';
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CancelIcon from "@mui/icons-material/Cancel";
 
 // https://mui.com/material-ui/react-table/
 function TablePaginationActions(props) {
@@ -134,7 +133,7 @@ export default function BasicTable() {
       })
       .catch(setErrorMessage)
       .finally(() => window.location.reload());
-  }
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -183,40 +182,45 @@ export default function BasicTable() {
             {(rowsPerPage > 0
               ? tramiters.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               : tramiters
-            ).map((tramiter) => ( !(tramiter.approved) &&
-              <TableRow
-                key={tramiter.id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {tramiter.id}
-                </TableCell>
-                <TableCell align="right">{tramiter.firstName + " " + tramiter.lastName}</TableCell>
-                <TableCell align="right">{tramiter.phone}</TableCell>
-                <TableCell align="right">{tramiter.email}</TableCell>
-                <TableCell align="right">{tramiter.city}</TableCell>
-                <TableCell align="right">{tramiter.commune}</TableCell>
-          
-                <TableCell align="right">
-                  <button
-                    type="button"
-                    className="btn-icon"
-                    onClick={() => handleApproveClick(tramiter)}
+            ).map(
+              (tramiter) =>
+                !tramiter.approved && (
+                  <TableRow
+                    key={tramiter.id}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    <CheckCircleIcon />
-                  </button>
-                </TableCell>
-                <TableCell align="right">
-                  <button
-                    type="button"
-                    className="btn-icon"
-                    onClick={() => handleRejectClick(tramiter.id)}
-                  >
-                    <CancelIcon />
-                  </button>
-                </TableCell>
-              </TableRow>
-            ))}
+                    <TableCell component="th" scope="row">
+                      {tramiter.id}
+                    </TableCell>
+                    <TableCell align="right">
+                      {`${tramiter.firstName} ${tramiter.lastName}`}
+                    </TableCell>
+                    <TableCell align="right">{tramiter.phone}</TableCell>
+                    <TableCell align="right">{tramiter.email}</TableCell>
+                    <TableCell align="right">{tramiter.city}</TableCell>
+                    <TableCell align="right">{tramiter.commune}</TableCell>
+
+                    <TableCell align="right">
+                      <button
+                        type="button"
+                        className="btn-icon"
+                        onClick={() => handleApproveClick(tramiter)}
+                      >
+                        <CheckCircleIcon />
+                      </button>
+                    </TableCell>
+                    <TableCell align="right">
+                      <button
+                        type="button"
+                        className="btn-icon"
+                        onClick={() => handleRejectClick(tramiter.id)}
+                      >
+                        <CancelIcon />
+                      </button>
+                    </TableCell>
+                  </TableRow>
+                )
+            )}
             {emptyRows > 0 && (
               <TableRow style={{ height: 53 * emptyRows }}>
                 <TableCell colSpan={6} />
