@@ -65,12 +65,11 @@ export default function UserProcedureInfo(prop) {
       .finally(() => setLoading(false));
   }
 
+  if (!currentUser) return <Navigate to="/home" />;
+
   if (loading) {
     return <h2>Loading...</h2>;
   }
-
-  // eslint-disable-next-line no-console
-  console.log(errorMessage);
 
   if (currentUser.type !== "user") return <Navigate to="/home" />;
   if (procedure.userId !== currentUser.id) return <Navigate to="/home" />;

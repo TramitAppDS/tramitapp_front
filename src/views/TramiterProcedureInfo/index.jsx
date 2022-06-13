@@ -65,12 +65,12 @@ export default function TramiterProcedureInfo(prop) {
       .finally(() => setLoading(false));
   }
 
+  if (!currentUser) return <Navigate to="/home" />;
+
   if (loading) {
     return <h2>Loading...</h2>;
   }
 
-  // eslint-disable-next-line no-console
-  console.log(errorMessage);
 
   if (currentUser.type !== "tramiter") return <Navigate to="/home" />;
   if (procedure.tramiterId !== currentUser.id) return <Navigate to="/home" />;
