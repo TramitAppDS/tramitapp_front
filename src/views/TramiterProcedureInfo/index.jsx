@@ -1,21 +1,16 @@
 /* eslint-disable react/jsx-no-bind */
 import React, { useState, useEffect } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import useAuth from "hooks/useAuth";
-import Box from "@mui/material/Box";
-import Select from "@mui/material/Select";
 import Button from "@mui/material/Button";
-import MenuItem from "@mui/material/MenuItem";
-import InputLabel from "@mui/material/InputLabel";
-import FormControl from "@mui/material/FormControl";
 
 export default function TramiterProcedureInfo(prop) {
   const { procedure } = prop;
   const { currentUser } = useAuth();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [select, setSelect] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(true);
@@ -37,24 +32,15 @@ export default function TramiterProcedureInfo(prop) {
       .finally(() => setLoading(false));
   }, []);
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const object = {};
-    data.forEach((value, key) => {
-      object[key] = value;
-    });
-    object.userId = currentUser.id;
-    const body = JSON.stringify(object);
+  function handleSubmit() {
     const requestOptions = {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${currentUser?.access_token}`,
       },
-      body,
     };
-    fetch(`${process.env.REACT_APP_API_URL}/procedures/avance/${procedure.id}`, requestOptions)
+    fetch(`${process.env.REACT_APP_API_URL}/procedures/advance/${procedure.id}`, requestOptions)
       .then((response) => {
         if (response.status !== 200) {
           return [];
@@ -62,7 +48,16 @@ export default function TramiterProcedureInfo(prop) {
         return response.json();
       })
       .catch(setErrorMessage)
-      .finally(() => setLoading(false));
+      .then(() => setLoading(false))
+      .then(() => {
+        procedure.status += 1;
+      })
+      .then(() =>
+        navigate("/tramiter-procedure-info", {
+          state: { procedure },
+        })
+      )
+      .finally(() => window.location.reload());
   }
 
   if (!currentUser) return <Navigate to="/home" />;
@@ -71,12 +66,12 @@ export default function TramiterProcedureInfo(prop) {
     return <h2>Loading...</h2>;
   }
 
-
   if (currentUser.type !== "tramiter") return <Navigate to="/home" />;
   if (procedure.tramiterId !== currentUser.id) return <Navigate to="/home" />;
 
   return (
     <div style={{ textAlign: "center" }}>
+      <p>{errorMessage}</p>
       <br />
       {user !== null && (
         <>
@@ -94,40 +89,34 @@ export default function TramiterProcedureInfo(prop) {
       <h1 className="title is-2">Estado actual del trámite:</h1>
       <p className="is-size-5">
         <strong>Status: </strong>
-        {procedure.status}
+        {procedure.status === 1 && "Trámite en proceso"}
+        {procedure.status === 2 && "Trámite Finalizado"}
       </p>
+      <br />
       <p className="is-size-5">
         {procedure.status !== 2 && (
           <>
             <div>Reportar avance </div>
             <div>
-              <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                  <InputLabel id="demo-simple-select-standard-label">Estado del trámite</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-standard-label"
-                    id="status"
-                    name="status"
-                    label="Status"
-                    onChange={() => setSelect(true)}
-                    required
-                  >
-                    {procedure.status === 0 && (
-                      <>
-                        <MenuItem value={1}>1</MenuItem>
-                        <MenuItem value={2}>2</MenuItem>
-                      </>
-                    )}
-                    {procedure.status === 1 && <MenuItem value={2}>2</MenuItem>}
-                  </Select>
-                </FormControl>
-                <Button disabled={!select} type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
-                  Reportar
-                </Button>
-              </Box>
+              <Button
+                type="button"
+                onClick={handleSubmit}
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Trámite finalizado
+              </Button>
             </div>
           </>
         )}
+      </p>
+      <p className="is-size-5">
+        <strong>Patente: </strong>
+        {procedure.plate}
+      </p>
+      <p className="is-size-5">
+        <strong>Dirección: </strong>
+        {procedure.address}
       </p>
       <p className="is-size-5">
         <strong>Comentarios: </strong>
@@ -136,6 +125,10 @@ export default function TramiterProcedureInfo(prop) {
       <p className="is-size-5">
         <strong>Precio: </strong>
         {procedure.price}
+      </p>
+      <p className="is-size-5">
+        <strong>Calificación: </strong>
+        {procedure.rating}
       </p>
     </div>
   );
