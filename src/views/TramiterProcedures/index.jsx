@@ -100,7 +100,7 @@ export default function BasicTable() {
   };
 
   const handleTrashClick = async (procedureId) => {
-    const body = { tramiterId: null };
+    const body = { tramiterId: null, status: 0 };
     const requestOptions = {
       method: "PATCH",
       body: JSON.stringify(body),
