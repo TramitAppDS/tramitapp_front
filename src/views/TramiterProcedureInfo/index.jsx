@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import useAuth from "hooks/useAuth";
 import Button from "@mui/material/Button";
+import StarRatings from "react-star-ratings";
 
 export default function TramiterProcedureInfo(prop) {
   const { procedure } = prop;
@@ -90,6 +91,14 @@ export default function TramiterProcedureInfo(prop) {
       })
       .catch(setErrorMessage)
       .then(() => setLoading(false))
+      .then(() => {
+        procedure.status += 1;
+      })
+      .then(() =>
+        navigate("/tramiter-procedure-info", {
+          state: { procedure },
+        })
+      )
       .finally(() => window.location.reload());
   }
 
@@ -124,6 +133,7 @@ export default function TramiterProcedureInfo(prop) {
         <strong>Status: </strong>
         {procedure.status === 1 && "Trámite en proceso"}
         {procedure.status === 2 && "Trámite Finalizado"}
+        {procedure.status === 3 && "Trámite Finalizado y Pago Confirmado"}
       </p>
       <br />
       <p className="is-size-5">
@@ -176,7 +186,16 @@ export default function TramiterProcedureInfo(prop) {
       </p>
       <p className="is-size-5">
         <strong>Calificación: </strong>
-        {procedure.rating}
+        {procedure.rating ? (
+          <StarRatings
+            rating={procedure.rating}
+            starRatedColor="yellow"
+            starDimension="20px"
+            name="rating"
+          />
+        ) : (
+          "El trámite no ha sido calificado."
+        )}
       </p>
     </div>
   );
