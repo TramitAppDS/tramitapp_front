@@ -8,11 +8,13 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
+import StarRatings from "react-star-ratings";
 
 export default function UserProcedureInfo(prop) {
   const { procedure } = prop;
   const { currentUser } = useAuth();
   const [tramiter, setTramiter] = useState(null);
+  const [gain, setGain] = useState({ status: null });
   const [loading, setLoading] = useState(false);
   const [select, setSelect] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -25,6 +27,18 @@ export default function UserProcedureInfo(prop) {
         Authorization: `Bearer ${currentUser?.access_token}`,
       },
     };
+    // fetch gain
+    fetch(`${process.env.REACT_APP_API_URL}/procedures/gain/${procedure.id}`, requestOptions)
+      .then((response) => {
+        if (response.status !== 200) {
+          return { status: null };
+        }
+        return response.json();
+      })
+      .then(setGain)
+      .catch(setErrorMessage);
+
+    // fetch tramiter
     fetch(`${process.env.REACT_APP_API_URL}/tramiters/${procedure.tramiterId}`, requestOptions)
       .then((response) => {
         if (response.status !== 200) {
@@ -65,6 +79,26 @@ export default function UserProcedureInfo(prop) {
       .finally(() => setLoading(false));
   }
 
+  function ConfirmPayment() {
+    const requestOptions = {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${currentUser?.access_token}`,
+      },
+    };
+    fetch(`${process.env.REACT_APP_API_URL}/gains/procedure/${procedure.id}`, requestOptions)
+      .then((response) => {
+        if (response.status !== 200) {
+          return [];
+        }
+        return response.json();
+      })
+      .catch(setErrorMessage)
+      .then(() => setLoading(false))
+      .finally(() => window.location.reload());
+  }
+
   if (!currentUser) return <Navigate to="/home" />;
 
   if (loading) {
@@ -76,6 +110,7 @@ export default function UserProcedureInfo(prop) {
 
   return (
     <div style={{ textAlign: "center" }}>
+      <p>{errorMessage}</p>
       <br />
       {!tramiter && <h1 className="title is-2">Conectando con un Tramiter...</h1>}
 
@@ -111,10 +146,25 @@ export default function UserProcedureInfo(prop) {
       <h1 className="title is-2">Estado actual del trámite:</h1>
       <p className="is-size-5">
         <strong>Status: </strong>
-        {procedure.status}
+        {procedure.status === 0 && "Estamos buscando un Tramiter disponible"}
+        {procedure.status === 1 && "Trámite en proceso"}
+        {procedure.status === 2 && "Trámite Finalizado, Esperando Pago"}
+        {procedure.status === 3 && "Pago recibido por el Tramiter"}
       </p>
       <p className="is-size-5">
-        {procedure.status === 2 && !(procedure.rating >= 0) ? (
+        {procedure.status === 2 && gain.status !== 1 && (
+          <div>
+            <Button
+              type="button"
+              onClick={ConfirmPayment}
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Confirmar Realización del Pago
+            </Button>
+          </div>
+        )}
+        {procedure.status === 3 && !(procedure.rating >= 0) ? (
           <>
             <div>Tramite completado </div>
             <div>
@@ -150,10 +200,27 @@ export default function UserProcedureInfo(prop) {
           </>
         ) : (
           <p className="is-size-5">
-            <strong>Rating: </strong>
-            {procedure.rating}
+            <strong>Calificación: </strong>
+            {procedure.rating ? (
+              <StarRatings
+                rating={procedure.rating}
+                starRatedColor="yellow"
+                starDimension="20px"
+                name="rating"
+              />
+            ) : (
+              "El trámite no ha sido calificado."
+            )}
           </p>
         )}
+      </p>
+      <p className="is-size-5">
+        <strong>Patente: </strong>
+        {procedure.plate}
+      </p>
+      <p className="is-size-5">
+        <strong>Dirección: </strong>
+        {procedure.address}
       </p>
       <p className="is-size-5">
         <strong>Comentarios: </strong>

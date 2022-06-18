@@ -3,11 +3,13 @@ import React, { useState, useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import useAuth from "hooks/useAuth";
 import Button from "@mui/material/Button";
+import StarRatings from "react-star-ratings";
 
 export default function TramiterProcedureInfo(prop) {
   const { procedure } = prop;
   const { currentUser } = useAuth();
   const [user, setUser] = useState(null);
+  const [debt, setDebt] = useState({ status: null });
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
@@ -20,6 +22,18 @@ export default function TramiterProcedureInfo(prop) {
         Authorization: `Bearer ${currentUser?.access_token}`,
       },
     };
+    // fetch debt
+    fetch(`${process.env.REACT_APP_API_URL}/procedures/debt/${procedure.id}`, requestOptions)
+      .then((response) => {
+        if (response.status !== 200) {
+          return { status: null };
+        }
+        return response.json();
+      })
+      .then(setDebt)
+      .catch(setErrorMessage);
+
+    // fetch user
     fetch(`${process.env.REACT_APP_API_URL}/users/${procedure.userId}`, requestOptions)
       .then((response) => {
         if (response.status !== 200) {
@@ -32,7 +46,7 @@ export default function TramiterProcedureInfo(prop) {
       .finally(() => setLoading(false));
   }, []);
 
-  function handleSubmit() {
+  function EndProcedure() {
     const requestOptions = {
       method: "PATCH",
       headers: {
@@ -41,6 +55,34 @@ export default function TramiterProcedureInfo(prop) {
       },
     };
     fetch(`${process.env.REACT_APP_API_URL}/procedures/advance/${procedure.id}`, requestOptions)
+      .then((response) => {
+        if (response.status !== 200) {
+          return [];
+        }
+        return response.json();
+      })
+      .catch(setErrorMessage)
+      .then(() => setLoading(false))
+      .then(() => {
+        procedure.status += 1;
+      })
+      .then(() =>
+        navigate("/tramiter-procedure-info", {
+          state: { procedure },
+        })
+      )
+      .finally(() => window.location.reload());
+  }
+
+  function ConfirmPayment() {
+    const requestOptions = {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${currentUser?.access_token}`,
+      },
+    };
+    fetch(`${process.env.REACT_APP_API_URL}/debts/procedure/${procedure.id}`, requestOptions)
       .then((response) => {
         if (response.status !== 200) {
           return [];
@@ -91,20 +133,36 @@ export default function TramiterProcedureInfo(prop) {
         <strong>Status: </strong>
         {procedure.status === 1 && "Trámite en proceso"}
         {procedure.status === 2 && "Trámite Finalizado"}
+        {procedure.status === 3 && "Trámite Finalizado y Pago Confirmado"}
       </p>
       <br />
       <p className="is-size-5">
-        {procedure.status !== 2 && (
+        {procedure.status === 1 && (
           <>
             <div>Reportar avance </div>
             <div>
               <Button
                 type="button"
-                onClick={handleSubmit}
+                onClick={EndProcedure}
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
                 Trámite finalizado
+              </Button>
+            </div>
+          </>
+        )}
+        {procedure.status === 2 && debt.status !== 1 && (
+          <>
+            <div>Reportar avance </div>
+            <div>
+              <Button
+                type="button"
+                onClick={ConfirmPayment}
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Confirmar Recepción del Pago
               </Button>
             </div>
           </>
@@ -128,7 +186,16 @@ export default function TramiterProcedureInfo(prop) {
       </p>
       <p className="is-size-5">
         <strong>Calificación: </strong>
-        {procedure.rating}
+        {procedure.rating ? (
+          <StarRatings
+            rating={procedure.rating}
+            starRatedColor="yellow"
+            starDimension="20px"
+            name="rating"
+          />
+        ) : (
+          "El trámite no ha sido calificado."
+        )}
       </p>
     </div>
   );
