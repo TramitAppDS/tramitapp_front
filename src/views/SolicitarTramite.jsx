@@ -14,6 +14,9 @@ import Box from "@mui/material/Box";
 import FindInPageIcon from "@mui/icons-material/FindInPage";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import useAuth from "../hooks/useAuth";
 
@@ -22,11 +25,81 @@ const theme = createTheme();
 export default function SolicitarTramite() {
   const navigate = useNavigate();
   const [select, setSelect] = useState(false);
+  const [selected, setSelected] = useState("");
+  const [value, setValue] = useState(null);
   const { currentUser } = useAuth();
 
   function refresh() {
     navigate("/home");
     window.location.reload();
+  }
+
+  const changeSelectOptionHandler = (event) => {
+    setSelected(event.target.value);
+    setSelect(true);
+  };
+
+  let form = null;
+
+  if (selected === 0) {
+    form = [
+      <TextField
+        margin="normal"
+        required
+        fullWidth
+        id="plate"
+        label="Patente"
+        name="plate"
+        autoFocus
+        />, 
+      <TextField
+        margin="normal"
+        required
+        fullWidth
+        id="address"
+        label="Dirección donde estará el vehiculo"
+        name="address"
+        autoFocus
+      />,
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <DatePicker
+          margin="normal"
+          required
+          fullWidth
+          id="withdrawal_date"
+          label="Fecha de retiro del vehiculo"
+          name="withdrawal_date"
+          value={value}
+          onChange={(newValue) => {
+          setValue(newValue);
+          }}
+          renderInput={(params) => <TextField {...params} />}
+          autoFocus
+        />
+      </LocalizationProvider>,
+      <Typography component="h1" variant="h7">
+        <br></br>
+        Persona disponible al momento de retiro:
+      </Typography>,
+      <TextField
+        margin="normal"
+        required
+        fullWidth
+        id="recipient_name"
+        label="Nombre"
+        name="recipient_name"
+        autoFocus
+      />,
+      <TextField
+        required
+        margin="normal"
+        fullWidth
+        id="recipient_phone"
+        label="Número de Telefono"
+        name="recipient_phone"
+        autoFocus
+      />,
+    ];
   }
 
   function handleSubmit(event) {
@@ -96,22 +169,24 @@ export default function SolicitarTramite() {
                 id="type"
                 name="type"
                 label="Tipo"
-                onChange={() => setSelect(true)}
+                onChange={changeSelectOptionHandler}
+                // onChange={() => {setSelect(true); }}
                 required
               >
                 <MenuItem value={0}>Revisión Técnica</MenuItem>
-                <MenuItem value={1}>Permiso de Circulación</MenuItem>
+                {/* <MenuItem value={1}>Permiso de Circulación</MenuItem> */}
               </Select>
             </FormControl>
+            
+            {form}
 
             <TextField
               margin="normal"
-              required
               fullWidth
               id="comments"
               multiline
               rows={4}
-              label="Comentario"
+              label="Comentario adicional"
               name="comments"
               autoComplete="comentario"
               autoFocus
