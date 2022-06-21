@@ -60,6 +60,7 @@ export default function UserProcedureInfo(prop) {
       object[key] = value;
     });
     object.userId = currentUser.id;
+    procedure.rating = Number(object.rating);
     const body = JSON.stringify(object);
     const requestOptions = {
       method: "PATCH",
@@ -78,9 +79,6 @@ export default function UserProcedureInfo(prop) {
       })
       .catch(setErrorMessage)
       .then(() => setLoading(false))
-      .then(() => {
-        procedure.rating = 3;
-      })
       .then(() =>
         navigate("/user-procedure-info", {
           state: { procedure },
