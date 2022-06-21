@@ -51,7 +51,7 @@ export default function SolicitarTramite() {
         label="Patente"
         name="plate"
         autoFocus
-        />, 
+      />,
       <TextField
         margin="normal"
         required
@@ -71,14 +71,14 @@ export default function SolicitarTramite() {
           name="withdrawal_date"
           value={value}
           onChange={(newValue) => {
-          setValue(newValue);
+            setValue(newValue);
           }}
           renderInput={(params) => <TextField {...params} />}
           autoFocus
         />
       </LocalizationProvider>,
       <Typography component="h1" variant="h7">
-        <br></br>
+        <br />
         Persona disponible al momento de retiro:
       </Typography>,
       <TextField
@@ -106,8 +106,8 @@ export default function SolicitarTramite() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const object = {};
-    data.forEach((value, key) => {
-      object[key] = value;
+    data.forEach((val, key) => {
+      object[key] = val;
     });
     object.userId = currentUser.id;
     object.status = 0;
@@ -177,7 +177,7 @@ export default function SolicitarTramite() {
                 {/* <MenuItem value={1}>Permiso de Circulación</MenuItem> */}
               </Select>
             </FormControl>
-            
+
             {form}
 
             <TextField

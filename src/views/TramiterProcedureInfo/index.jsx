@@ -54,7 +54,7 @@ export default function TramiterProcedureInfo(prop) {
         Authorization: `Bearer ${currentUser?.access_token}`,
       },
     };
-    fetch(`${process.env.REACT_APP_API_URL}/procedures/advance/${procedure.id}`, requestOptions)
+    fetch(`${process.env.REACT_APP_API_URL}/procedures/close/${procedure.id}`, requestOptions)
       .then((response) => {
         if (response.status !== 200) {
           return [];

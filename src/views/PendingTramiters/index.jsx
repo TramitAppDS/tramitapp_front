@@ -204,7 +204,7 @@ export default function BasicTable() {
                       <button
                         type="button"
                         className="btn-icon"
-                        onClick={() => handleApproveClick(tramiter)}
+                        onClick={() => handleApproveClick(tramiter.id)}
                       >
                         <CheckCircleIcon />
                       </button>

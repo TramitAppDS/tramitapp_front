@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-no-bind */
 import React, { useState, useEffect } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import useAuth from "hooks/useAuth";
 import Box from "@mui/material/Box";
 import Select from "@mui/material/Select";
@@ -18,6 +18,7 @@ export default function UserProcedureInfo(prop) {
   const [loading, setLoading] = useState(false);
   const [select, setSelect] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(true);
@@ -76,7 +77,16 @@ export default function UserProcedureInfo(prop) {
         return response.json();
       })
       .catch(setErrorMessage)
-      .finally(() => setLoading(false));
+      .then(() => setLoading(false))
+      .then(() => {
+        procedure.rating = 3;
+      })
+      .then(() =>
+        navigate("/user-procedure-info", {
+          state: { procedure },
+        })
+      )
+      .finally(() => window.location.reload());
   }
 
   function ConfirmPayment() {
@@ -164,7 +174,7 @@ export default function UserProcedureInfo(prop) {
             </Button>
           </div>
         )}
-        {procedure.status === 3 && !(procedure.rating >= 0) ? (
+        {procedure.status === 3 && procedure.rating === null ? (
           <>
             <div>Tramite completado </div>
             <div>
