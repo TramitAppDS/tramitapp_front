@@ -178,7 +178,7 @@ export default function UserProcedureInfo(prop) {
               </p>
             </div>
           ) : (
-            <p className="is-size-5"> Actualmente el tramiter no presenta información de pago </p>
+            <p className="is-size-5"> Actualmente el Tramiter no presenta información de pago </p>
           )}
         </>
       )}
