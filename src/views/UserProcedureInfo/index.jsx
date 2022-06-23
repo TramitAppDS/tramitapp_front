@@ -10,6 +10,8 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import StarRatings from "react-star-ratings";
 
+const { statusList } = require("../../helpers/status");
+
 export default function UserProcedureInfo(prop) {
   const { procedure } = prop;
   const { currentUser } = useAuth();
@@ -154,10 +156,7 @@ export default function UserProcedureInfo(prop) {
       <h1 className="title is-2">Estado actual del trámite:</h1>
       <p className="is-size-5">
         <strong>Status: </strong>
-        {procedure.status === 0 && "Estamos buscando un Tramiter disponible"}
-        {procedure.status === 1 && "Trámite en proceso"}
-        {procedure.status === 2 && "Trámite Finalizado, Esperando Pago"}
-        {procedure.status === 3 && "Pago recibido por el Tramiter"}
+        {statusList[procedure.status]}
       </p>
       <p className="is-size-5">
         {procedure.status === 2 && gain.status !== 1 && (
