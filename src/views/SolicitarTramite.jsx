@@ -47,6 +47,7 @@ export default function SolicitarTramite() {
         label="Patente"
         name="plate"
         autoFocus
+        inputProps={{ maxLength: 200 }}
       />,
       <TextField
         margin="normal"
@@ -56,6 +57,7 @@ export default function SolicitarTramite() {
         label="Dirección donde estará el vehiculo"
         name="address"
         autoFocus
+        inputProps={{ maxLength: 200 }}
       />,
     ];
   }
@@ -148,6 +150,7 @@ export default function SolicitarTramite() {
               name="comments"
               autoComplete="comentario"
               autoFocus
+              inputProps={{ maxLength: 200 }}
             />
 
             <Button

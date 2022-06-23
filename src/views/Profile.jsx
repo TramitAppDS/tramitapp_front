@@ -50,6 +50,37 @@ export default function Profile() {
           </p>
 
           <br />
+
+          <p className="is-size-5">
+            <strong>Información de Pago</strong>
+          </p>
+
+          {currentUser.bank ? (
+            <div>
+              <p className="is-size-5">
+                <strong>Banco: </strong>
+                {currentUser.bank}
+              </p>
+
+              <p className="is-size-5">
+                <strong>Tipo de Cuenta: </strong>
+                {currentUser.accountType}
+              </p>
+
+              <p className="is-size-5">
+                <strong>Nro de Cuenta: </strong>
+                {currentUser.accountNumber}
+              </p>
+
+              <p className="is-size-5">
+                <strong>RUT: </strong>
+                {currentUser.rut}
+              </p>
+            </div>
+          ) : (
+            <p className="is-size-5"> Actualmente no presenta información de pago </p>
+          )}
+
           <br />
 
           <p>

@@ -103,6 +103,7 @@ export default function SignUp() {
                 name="firstName"
                 autoComplete="nombre"
                 autoFocus
+                inputProps={{ maxLength: 200 }}
               />
               <TextField
                 margin="normal"
@@ -112,6 +113,7 @@ export default function SignUp() {
                 label="Apellido"
                 name="lastName"
                 autoComplete="apellido"
+                inputProps={{ maxLength: 200 }}
               />
               <TextField
                 margin="normal"
@@ -121,6 +123,7 @@ export default function SignUp() {
                 label="Email"
                 name="email"
                 autoComplete="email"
+                inputProps={{ maxLength: 200 }}
               />
               <TextField
                 margin="normal"
@@ -130,6 +133,7 @@ export default function SignUp() {
                 label="Teléfono"
                 name="phone"
                 autoComplete="telefono"
+                inputProps={{ maxLength: 200 }}
               />
               <TextField
                 margin="normal"
@@ -139,6 +143,7 @@ export default function SignUp() {
                 label="Ciudad"
                 name="city"
                 autoComplete="Ciudad"
+                inputProps={{ maxLength: 200 }}
               />
               <TextField
                 margin="normal"
@@ -148,6 +153,7 @@ export default function SignUp() {
                 label="Comuna"
                 name="commune"
                 autoComplete="Comuna"
+                inputProps={{ maxLength: 200 }}
               />
               <TextField
                 margin="normal"
@@ -158,6 +164,7 @@ export default function SignUp() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                inputProps={{ maxLength: 200 }}
               />
               <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
                 Registrarme

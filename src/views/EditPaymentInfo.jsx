@@ -36,7 +36,7 @@ export default function EditPaymentInfo() {
     });
     const body = JSON.stringify(object);
     const requestOptions = {
-      method: "POST",
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${currentUser?.access_token}`,
@@ -87,15 +87,15 @@ export default function EditPaymentInfo() {
                 label="Banco"
                 required
               >
-                <MenuItem value={0}>Banco de Chile</MenuItem>
-                <MenuItem value={1}>Banco BICE</MenuItem>
-                <MenuItem value={2}>Banco Estado</MenuItem>
-                <MenuItem value={3}>Banco Falabella</MenuItem>
-                <MenuItem value={4}>Banco Santander</MenuItem>
-                <MenuItem value={5}>Banco Security</MenuItem>
-                <MenuItem value={6}>BCI</MenuItem>
-                <MenuItem value={7}>Itau Chile</MenuItem>
-                <MenuItem value={8}>Scotiabank</MenuItem>
+                <MenuItem value="Banco de Chile">Banco de Chile</MenuItem>
+                <MenuItem value="Banco BICE">Banco BICE</MenuItem>
+                <MenuItem value="Banco Estado">Banco Estado</MenuItem>
+                <MenuItem value="Banco Falabella">Banco Falabella</MenuItem>
+                <MenuItem value="Banco Santander">Banco Santander</MenuItem>
+                <MenuItem value="Banco Security">Banco Security</MenuItem>
+                <MenuItem value="BCI">BCI</MenuItem>
+                <MenuItem value="Itau Chile">Itau Chile</MenuItem>
+                <MenuItem value="Scotiabank">Scotiabank</MenuItem>
               </Select>
             </FormControl>
 
@@ -108,9 +108,9 @@ export default function EditPaymentInfo() {
                 label="Tipo de Cuenta"
                 required
               >
-                <MenuItem value={0}>Cuenta Corriente</MenuItem>
-                <MenuItem value={1}>Cuenta Vista</MenuItem>
-                <MenuItem value={2}>Ahorro</MenuItem>
+                <MenuItem value="Cuenta Corriente">Cuenta Corriente</MenuItem>
+                <MenuItem value="Cuenta Vista">Cuenta Vista</MenuItem>
+                <MenuItem value="Ahorro">Ahorro</MenuItem>
               </Select>
             </FormControl>
 
@@ -122,6 +122,7 @@ export default function EditPaymentInfo() {
               name="accountNumber"
               autoFocus
               required
+              inputProps={{ maxLength: 200 }}
             />
 
             <TextField
@@ -132,6 +133,7 @@ export default function EditPaymentInfo() {
               name="rut"
               autoFocus
               required
+              inputProps={{ maxLength: 200 }}
             />
 
             <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>

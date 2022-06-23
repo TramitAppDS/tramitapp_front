@@ -148,6 +148,38 @@ export default function UserProcedureInfo(prop) {
             <strong>Comuna: </strong>
             {tramiter.commune}
           </p>
+
+          <br />
+
+          <p className="is-size-5">
+            <strong>Información de Pago</strong>
+          </p>
+
+          {tramiter.bank ? (
+            <div>
+              <p className="is-size-5">
+                <strong>Banco: </strong>
+                {tramiter.bank}
+              </p>
+
+              <p className="is-size-5">
+                <strong>Tipo de Cuenta: </strong>
+                {tramiter.accountType}
+              </p>
+
+              <p className="is-size-5">
+                <strong>Nro de Cuenta: </strong>
+                {tramiter.accountNumber}
+              </p>
+
+              <p className="is-size-5">
+                <strong>RUT: </strong>
+                {tramiter.rut}
+              </p>
+            </div>
+          ) : (
+            <p className="is-size-5"> Actualmente el tramiter no presenta información de pago </p>
+          )}
         </>
       )}
       <br />
