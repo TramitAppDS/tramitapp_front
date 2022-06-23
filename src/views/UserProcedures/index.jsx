@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -13,6 +14,7 @@ import Paper from "@mui/material/Paper";
 import useAuth from "hooks/useAuth";
 import SingleUser from "components/SingleUser";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import ZoomInOutlinedIcon from "@mui/icons-material/ZoomInOutlined";
 import PropTypes from "prop-types";
 import { useTheme } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
@@ -20,6 +22,8 @@ import FirstPageIcon from "@mui/icons-material/FirstPage";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
+
+const { statusList } = require("../../helpers/status");
 
 // https://mui.com/material-ui/react-table/
 function TablePaginationActions(props) {
@@ -86,6 +90,7 @@ export default function BasicTable() {
   const [errorMessage, setErrorMessage] = useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const navigate = useNavigate();
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -114,6 +119,12 @@ export default function BasicTable() {
       .catch(setErrorMessage)
       .finally(() => window.location.reload());
   };
+
+  function handleProcedureClick(procedure) {
+    navigate("/user-procedure-info", {
+      state: { procedure },
+    });
+  }
 
   useEffect(() => {
     setLoading(true);
@@ -151,7 +162,6 @@ export default function BasicTable() {
               <TableCell>Tramite</TableCell>
               <TableCell align="right">Usuario</TableCell>
               <TableCell align="right">Status</TableCell>
-              <TableCell align="right">Tipo</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -169,10 +179,18 @@ export default function BasicTable() {
                 <TableCell align="right">
                   <SingleUser key={procedure.userId} id={procedure.userId} />
                 </TableCell>
-                <TableCell align="right">{procedure.status}</TableCell>
-                <TableCell align="right">{procedure.type}</TableCell>
+                <TableCell align="right">{statusList[procedure.status]}</TableCell>
                 <TableCell align="right">
-                  <form>
+                  <button
+                    type="button"
+                    className="btn-icon"
+                    onClick={() => handleProcedureClick(procedure)}
+                  >
+                    <ZoomInOutlinedIcon />
+                  </button>
+                </TableCell>
+                {procedure.status === 0 && (
+                  <TableCell align="right">
                     <button
                       type="button"
                       className="btn-icon"
@@ -180,8 +198,8 @@ export default function BasicTable() {
                     >
                       <DeleteOutlineOutlinedIcon />
                     </button>
-                  </form>
-                </TableCell>
+                  </TableCell>
+                )}
               </TableRow>
             ))}
             {emptyRows > 0 && (

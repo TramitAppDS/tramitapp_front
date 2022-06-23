@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "@mui/material/Button";
 import { NavLink } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
+import useAuth from "hooks/useAuth";
 
 function Navbar() {
   const { currentUser, handleUserLogout } = useAuth();

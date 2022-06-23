@@ -1,6 +1,7 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
+import StarRatings from "react-star-ratings";
+import useAuth from "hooks/useAuth";
 
 export default function Profile() {
   const { currentUser } = useAuth();
@@ -19,7 +20,16 @@ export default function Profile() {
         <>
           <p className="is-size-5">
             <strong>Calificación: </strong>
-            {currentUser.rating}
+            {currentUser.rating ? (
+              <StarRatings
+                rating={currentUser.rating}
+                starRatedColor="yellow"
+                starDimension="20px"
+                name="rating"
+              />
+            ) : (
+              "Sin calificaciones"
+            )}
           </p>
           <p className="is-size-5">
             <strong>Telefono: </strong>

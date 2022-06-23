@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -12,9 +11,6 @@ import TableFooter from "@mui/material/TableFooter";
 import TablePagination from "@mui/material/TablePagination";
 import Paper from "@mui/material/Paper";
 import useAuth from "hooks/useAuth";
-import SingleUser from "components/SingleUser";
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import ZoomInOutlinedIcon from "@mui/icons-material/ZoomInOutlined";
 import PropTypes from "prop-types";
 import { useTheme } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
@@ -22,8 +18,8 @@ import FirstPageIcon from "@mui/icons-material/FirstPage";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
-
-const { statusList } = require("../../helpers/status");
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CancelIcon from "@mui/icons-material/Cancel";
 
 // https://mui.com/material-ui/react-table/
 function TablePaginationActions(props) {
@@ -85,12 +81,11 @@ TablePaginationActions.propTypes = {
 
 export default function BasicTable() {
   const { currentUser } = useAuth();
-  const [procedures, setProcedures] = useState([]);
+  const [tramiters, setTramiters] = useState([]);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const navigate = useNavigate();
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -101,15 +96,15 @@ export default function BasicTable() {
     setPage(0);
   };
 
-  const handleTrashClick = async (procedureId) => {
+  const handleRejectClick = async (tramiterId) => {
     const requestOptions = {
-      method: "PATCH",
+      method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${currentUser?.access_token}`,
       },
     };
-    fetch(`${process.env.REACT_APP_API_URL}/procedures/cancel/${procedureId}`, requestOptions)
+    fetch(`${process.env.REACT_APP_API_URL}/tramiters/${tramiterId}`, requestOptions)
       .then((response) => {
         if (response.status !== 200) {
           return [];
@@ -120,11 +115,25 @@ export default function BasicTable() {
       .finally(() => window.location.reload());
   };
 
-  function handleProcedureClick(procedure) {
-    navigate("/tramiter-procedure-info", {
-      state: { procedure },
-    });
-  }
+  const handleApproveClick = async (tramiterId) => {
+    const requestOptions = {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${currentUser?.access_token}`,
+      },
+    };
+
+    fetch(`${process.env.REACT_APP_API_URL}/tramiters/admin/approve/${tramiterId}`, requestOptions)
+      .then((response) => {
+        if (response.status !== 200) {
+          return [];
+        }
+        return response.json();
+      })
+      .catch(setErrorMessage)
+      .finally(() => window.location.reload());
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -134,26 +143,22 @@ export default function BasicTable() {
         Authorization: `Bearer ${currentUser?.access_token}`,
       },
     };
-    fetch(`${process.env.REACT_APP_API_URL}/procedures/tramiter/${currentUser?.id}`, requestOptions)
+    fetch(`${process.env.REACT_APP_API_URL}/tramiters/`, requestOptions)
       .then((response) => {
         if (response.status !== 200) {
           return [];
         }
         return response.json();
       })
-      .then(setProcedures)
+      .then(setTramiters)
       .catch(setErrorMessage)
       .finally(() => setLoading(false));
   }, []);
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - procedures.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - tramiters.length) : 0;
 
   if (loading) {
     return <h2>Loading...</h2>;
-  }
-
-  if (!currentUser) {
-    return <Navigate to="/home" />;
   }
 
   return (
@@ -163,51 +168,59 @@ export default function BasicTable() {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Tramite</TableCell>
-              <TableCell align="right">Usuario</TableCell>
-              <TableCell align="right">Status</TableCell>
+              <TableCell>ID</TableCell>
+              <TableCell align="right">Nombre</TableCell>
+              <TableCell align="right">Telefono</TableCell>
+              <TableCell align="right">Email</TableCell>
+              <TableCell align="right">Ciudad</TableCell>
+              <TableCell align="right">Comuna</TableCell>
+              <TableCell align="right">Aprobar</TableCell>
+              <TableCell align="right">Rechazar</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {(rowsPerPage > 0
-              ? procedures.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              : procedures
-            ).map((procedure) => (
-              <TableRow
-                key={procedure.id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {procedure.id}
-                </TableCell>
-                <TableCell align="right">
-                  <SingleUser key={procedure.userId} id={procedure.userId} />
-                </TableCell>
-                <TableCell align="right">{statusList[procedure.status]}</TableCell>
-                <TableCell align="right">
-                  <button
-                    type="button"
-                    className="btn-icon"
-                    onClick={() => handleProcedureClick(procedure)}
+              ? tramiters.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              : tramiters
+            ).map(
+              (tramiter) =>
+                !tramiter.approved && (
+                  <TableRow
+                    key={tramiter.id}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    <ZoomInOutlinedIcon />
-                  </button>
-                </TableCell>
-                {procedure.status === 1 && (
-                  <TableCell align="right">
-                    <form>
+                    <TableCell component="th" scope="row">
+                      {tramiter.id}
+                    </TableCell>
+                    <TableCell align="right">
+                      {`${tramiter.firstName} ${tramiter.lastName}`}
+                    </TableCell>
+                    <TableCell align="right">{tramiter.phone}</TableCell>
+                    <TableCell align="right">{tramiter.email}</TableCell>
+                    <TableCell align="right">{tramiter.city}</TableCell>
+                    <TableCell align="right">{tramiter.commune}</TableCell>
+
+                    <TableCell align="right">
                       <button
                         type="button"
                         className="btn-icon"
-                        onClick={() => handleTrashClick(procedure.id)}
+                        onClick={() => handleApproveClick(tramiter.id)}
                       >
-                        <DeleteOutlineOutlinedIcon />
+                        <CheckCircleIcon />
                       </button>
-                    </form>
-                  </TableCell>
-                )}
-              </TableRow>
-            ))}
+                    </TableCell>
+                    <TableCell align="right">
+                      <button
+                        type="button"
+                        className="btn-icon"
+                        onClick={() => handleRejectClick(tramiter.id)}
+                      >
+                        <CancelIcon />
+                      </button>
+                    </TableCell>
+                  </TableRow>
+                )
+            )}
             {emptyRows > 0 && (
               <TableRow style={{ height: 53 * emptyRows }}>
                 <TableCell colSpan={6} />
@@ -219,7 +232,7 @@ export default function BasicTable() {
               <TablePagination
                 rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
                 colSpan={3}
-                count={procedures.length}
+                count={tramiters.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 SelectProps={{
