@@ -21,6 +21,8 @@ import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 
+const { statusList } = require("../../helpers/status");
+
 // https://mui.com/material-ui/react-table/
 function TablePaginationActions(props) {
   const theme = useTheme();
@@ -151,7 +153,6 @@ export default function BasicTable() {
               <TableCell>Tramite</TableCell>
               <TableCell align="right">Usuario</TableCell>
               <TableCell align="right">Status</TableCell>
-              <TableCell align="right">Tipo</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -169,8 +170,7 @@ export default function BasicTable() {
                 <TableCell align="right">
                   <SingleUser key={procedure.userId} id={procedure.userId} />
                 </TableCell>
-                <TableCell align="right">{procedure.status}</TableCell>
-                <TableCell align="right">{procedure.type}</TableCell>
+                <TableCell align="right">{statusList[procedure.status]}</TableCell>
                 <TableCell align="right">
                   <button
                     type="button"

@@ -189,6 +189,7 @@ export default function SolicitarTramite() {
               label="Comentario adicional"
               name="comments"
               autoComplete="comentario"
+              inputProps={{ maxLength: 200 }}
               autoFocus
             />
 

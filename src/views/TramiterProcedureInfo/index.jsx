@@ -5,6 +5,8 @@ import useAuth from "hooks/useAuth";
 import Button from "@mui/material/Button";
 import StarRatings from "react-star-ratings";
 
+const { statusList } = require("../../helpers/status");
+
 export default function TramiterProcedureInfo(prop) {
   const { procedure } = prop;
   const { currentUser } = useAuth();
@@ -131,9 +133,7 @@ export default function TramiterProcedureInfo(prop) {
       <h1 className="title is-2">Estado actual del trámite:</h1>
       <p className="is-size-5">
         <strong>Status: </strong>
-        {procedure.status === 1 && "Trámite en proceso"}
-        {procedure.status === 2 && "Trámite Finalizado"}
-        {procedure.status === 3 && "Trámite Finalizado y Pago Confirmado"}
+        {statusList[procedure.status]}
       </p>
       <br />
       <p className="is-size-5">

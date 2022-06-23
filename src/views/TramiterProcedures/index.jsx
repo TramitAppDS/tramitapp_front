@@ -23,6 +23,8 @@ import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 
+const { statusList } = require("../../helpers/status");
+
 // https://mui.com/material-ui/react-table/
 function TablePaginationActions(props) {
   const theme = useTheme();
@@ -100,16 +102,14 @@ export default function BasicTable() {
   };
 
   const handleTrashClick = async (procedureId) => {
-    const body = { tramiterId: null, status: 0 };
     const requestOptions = {
       method: "PATCH",
-      body: JSON.stringify(body),
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${currentUser?.access_token}`,
       },
     };
-    fetch(`${process.env.REACT_APP_API_URL}/procedures/${procedureId}`, requestOptions)
+    fetch(`${process.env.REACT_APP_API_URL}/procedures/cancel/${procedureId}`, requestOptions)
       .then((response) => {
         if (response.status !== 200) {
           return [];
@@ -166,7 +166,6 @@ export default function BasicTable() {
               <TableCell>Tramite</TableCell>
               <TableCell align="right">Usuario</TableCell>
               <TableCell align="right">Status</TableCell>
-              <TableCell align="right">Tipo</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -184,8 +183,7 @@ export default function BasicTable() {
                 <TableCell align="right">
                   <SingleUser key={procedure.userId} id={procedure.userId} />
                 </TableCell>
-                <TableCell align="right">{procedure.status}</TableCell>
-                <TableCell align="right">{procedure.type}</TableCell>
+                <TableCell align="right">{statusList[procedure.status]}</TableCell>
                 <TableCell align="right">
                   <button
                     type="button"
@@ -195,17 +193,19 @@ export default function BasicTable() {
                     <ZoomInOutlinedIcon />
                   </button>
                 </TableCell>
-                <TableCell align="right">
-                  <form>
-                    <button
-                      type="button"
-                      className="btn-icon"
-                      onClick={() => handleTrashClick(procedure.id)}
-                    >
-                      <DeleteOutlineOutlinedIcon />
-                    </button>
-                  </form>
-                </TableCell>
+                {procedure.status === 1 && (
+                  <TableCell align="right">
+                    <form>
+                      <button
+                        type="button"
+                        className="btn-icon"
+                        onClick={() => handleTrashClick(procedure.id)}
+                      >
+                        <DeleteOutlineOutlinedIcon />
+                      </button>
+                    </form>
+                  </TableCell>
+                )}
               </TableRow>
             ))}
             {emptyRows > 0 && (
