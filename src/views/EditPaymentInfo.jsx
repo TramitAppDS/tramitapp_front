@@ -87,7 +87,7 @@ export default function EditPaymentInfo() {
                 label="Banco"
                 required
               >
-                <MenuItem value={0}>Banco de Chile - Edwards</MenuItem>
+                <MenuItem value={0}>Banco de Chile</MenuItem>
                 <MenuItem value={1}>Banco BICE</MenuItem>
                 <MenuItem value={2}>Banco Estado</MenuItem>
                 <MenuItem value={3}>Banco Falabella</MenuItem>
