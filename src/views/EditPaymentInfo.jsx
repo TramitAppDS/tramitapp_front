@@ -1,7 +1,6 @@
-/* eslint-disable react/jsx-no-bind */
-import React, { useState } from "react";
+import React from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import Avatar from "@mui/material/Avatar";
+import useAuth from "hooks/useAuth";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
@@ -14,52 +13,18 @@ import Box from "@mui/material/Box";
 import FindInPageIcon from "@mui/icons-material/FindInPage";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import Avatar from "@mui/material/Avatar";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import useAuth from "../hooks/useAuth";
 
 const theme = createTheme();
 
-export default function SolicitarTramite() {
-  const navigate = useNavigate();
-  const [select, setSelect] = useState(false);
-  const [selected, setSelected] = useState("");
+export default function EditPaymentInfo() {
   const { currentUser } = useAuth();
+  const navigate = useNavigate();
 
   function refresh() {
-    navigate("/home");
+    navigate("/profile");
     window.location.reload();
-  }
-
-  const changeSelectOptionHandler = (event) => {
-    setSelected(event.target.value);
-    setSelect(true);
-  };
-
-  let form = null;
-
-  if (selected === 0) {
-    form = [
-      <TextField
-        margin="normal"
-        required
-        fullWidth
-        id="plate"
-        label="Patente"
-        name="plate"
-        autoFocus
-        inputProps={{ maxLength: 200 }}
-      />,
-      <TextField
-        margin="normal"
-        required
-        fullWidth
-        id="address"
-        label="Dirección donde estará el vehiculo"
-        name="address"
-        autoFocus
-        inputProps={{ maxLength: 200 }}
-      />,
-    ];
   }
 
   function handleSubmit(event) {
@@ -69,22 +34,19 @@ export default function SolicitarTramite() {
     data.forEach((val, key) => {
       object[key] = val;
     });
-    object.userId = currentUser.id;
-    object.status = 0;
-    if (object.type === 0) {
-      object.price = 10000;
-    }
-    object.price = 20000;
     const body = JSON.stringify(object);
     const requestOptions = {
-      method: "POST",
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${currentUser?.access_token}`,
       },
       body,
     };
-    fetch(`${process.env.REACT_APP_API_URL}/procedures`, requestOptions)
+    fetch(
+      `${process.env.REACT_APP_API_URL}/tramiters/transfer_data/${currentUser?.id}`,
+      requestOptions
+    )
       .then((response) => {
         if (response.status !== 200) {
           return [];
@@ -95,13 +57,7 @@ export default function SolicitarTramite() {
       .finally(refresh());
   }
 
-  if (!currentUser) {
-    return <Navigate to="/home" />;
-  }
-
-  if (currentUser.type === "tramiter") {
-    return <Navigate to="/home" />;
-  }
+  if (!currentUser) return <Navigate to="/home" />;
 
   return (
     <ThemeProvider theme={theme}>
@@ -119,52 +75,72 @@ export default function SolicitarTramite() {
             <FindInPageIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Solicita un trámite
+            Editar Datos de Pago
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-              <InputLabel id="demo-simple-select-standard-label">Tipo</InputLabel>
+              <InputLabel id="demo-simple-select-standard-label">Banco</InputLabel>
               <Select
                 labelId="demo-simple-select-standard-label"
-                id="type"
-                name="type"
-                label="Tipo"
-                onChange={changeSelectOptionHandler}
-                // onChange={() => {setSelect(true); }}
+                id="bank"
+                name="bank"
+                label="Banco"
                 required
               >
-                <MenuItem value={0}>Revisión Técnica</MenuItem>
-                {/* <MenuItem value={1}>Permiso de Circulación</MenuItem> */}
+                <MenuItem value="Banco de Chile">Banco de Chile</MenuItem>
+                <MenuItem value="Banco BICE">Banco BICE</MenuItem>
+                <MenuItem value="Banco Estado">Banco Estado</MenuItem>
+                <MenuItem value="Banco Falabella">Banco Falabella</MenuItem>
+                <MenuItem value="Banco Santander">Banco Santander</MenuItem>
+                <MenuItem value="Banco Security">Banco Security</MenuItem>
+                <MenuItem value="BCI">BCI</MenuItem>
+                <MenuItem value="Itau Chile">Itau Chile</MenuItem>
+                <MenuItem value="Scotiabank">Scotiabank</MenuItem>
               </Select>
             </FormControl>
 
-            {form}
+            <FormControl variant="standard" sx={{ m: 1, minWidth: 160 }}>
+              <InputLabel id="demo-simple-select-standard-label">Tipo de Cuenta</InputLabel>
+              <Select
+                labelId="demo-simple-select-standard-label"
+                id="accountType"
+                name="accountType"
+                label="Tipo de Cuenta"
+                required
+              >
+                <MenuItem value="Cuenta Corriente">Cuenta Corriente</MenuItem>
+                <MenuItem value="Cuenta Vista">Cuenta Vista</MenuItem>
+                <MenuItem value="Ahorro">Ahorro</MenuItem>
+              </Select>
+            </FormControl>
 
             <TextField
               margin="normal"
               fullWidth
-              id="comments"
-              multiline
-              rows={4}
-              label="Comentario adicional"
-              name="comments"
-              autoComplete="comentario"
-              inputProps={{ maxLength: 200 }}
+              id="accountNumber"
+              label="Numero de Cuenta"
+              name="accountNumber"
               autoFocus
+              required
               inputProps={{ maxLength: 200 }}
             />
 
-            <Button
-              disabled={!select}
-              type="submit"
+            <TextField
+              margin="normal"
               fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Solicitar
+              id="rut"
+              label="RUT"
+              name="rut"
+              autoFocus
+              required
+              inputProps={{ maxLength: 200 }}
+            />
+
+            <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+              Actualizar
             </Button>
 
-            <Link href="/home" variant="body2">
+            <Link href="/profile" variant="body2">
               Cancelar
             </Link>
           </Box>
