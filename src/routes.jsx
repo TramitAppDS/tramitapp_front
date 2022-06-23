@@ -11,6 +11,7 @@ import NotFound from "views/NotFound";
 import SolicitarTramite from "views/SolicitarTramite";
 import UserProcedureInfoPage from "layouts/user/procedure-info";
 import TramiterProcedureInfoPage from "layouts/tramiter/procedure-info";
+import EditPaymentInfo from "views/EditPaymentInfo";
 
 export default function Router() {
   return (
@@ -27,6 +28,7 @@ export default function Router() {
       <Route path="/tramiter-procedures" element={<TramiterProceduresPage />} />
       <Route path="/user-procedure-info" element={<UserProcedureInfoPage />} />
       <Route path="/tramiter-procedure-info" element={<TramiterProcedureInfoPage />} />
+      <Route path="/edit-payment-info" element={<EditPaymentInfo />} />
     </Routes>
   );
 }

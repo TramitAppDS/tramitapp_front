@@ -1,7 +1,8 @@
 import React from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, Link } from "react-router-dom";
 import StarRatings from "react-star-ratings";
 import useAuth from "hooks/useAuth";
+import Button from "@mui/material/Button";
 
 export default function Profile() {
   const { currentUser } = useAuth();
@@ -46,6 +47,15 @@ export default function Profile() {
           <p className="is-size-5">
             <strong>Comuna: </strong>
             {currentUser.commune}
+          </p>
+
+          <br />
+          <br />
+
+          <p>
+            <Button component={Link} to="/edit-payment-info" variant="contained">
+              Editar Datos de Pago
+            </Button>
           </p>
         </>
       )}
