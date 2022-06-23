@@ -13,10 +13,8 @@ export default function home() {
 
   return (
     <div>
-      <h1> Inicio tramitapp </h1>
       {currentUser && (
-        <h4>
-          Hello {currentUser.firstName} {currentUser.type}
+        <div>
           {currentUser.type === "user" && !currentUser.admin && (
             <UserProceduresPage currentUser={currentUser} />
           )}
@@ -24,7 +22,7 @@ export default function home() {
           {currentUser.type === "user" && currentUser.admin && (
             <PendingTramitersPage currentUser={currentUser} />
           )}
-        </h4>
+        </div>
       )}
     </div>
   );
