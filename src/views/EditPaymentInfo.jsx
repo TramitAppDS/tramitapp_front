@@ -20,7 +20,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 const theme = createTheme();
 
 export default function EditPaymentInfo() {
-  const { currentUser } = useAuth();
+  const { currentUser, handleUserLogin } = useAuth();
   const navigate = useNavigate();
 
   function refresh() {
@@ -28,13 +28,25 @@ export default function EditPaymentInfo() {
     window.location.reload();
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const object = {};
     data.forEach((val, key) => {
       object[key] = val;
     });
+    if (!object.bank) {
+      return null;
+    }
+    if (!object.rut) {
+      return null;
+    }
+    if (!object.accountType) {
+      return null;
+    }
+    if (!object.accountNumber) {
+      return null;
+    }
     const body = JSON.stringify(object);
     const requestOptions = {
       method: "PATCH",
@@ -54,8 +66,15 @@ export default function EditPaymentInfo() {
         }
         return response.json();
       })
-      .catch(refresh())
-      .finally(refresh());
+      .catch(refresh());
+    currentUser.bank = object.bank;
+    currentUser.accountType = object.accountType;
+    currentUser.accountNumber = object.accountNumber;
+    currentUser.rut = object.rut;
+    const user = { ...currentUser };
+    handleUserLogin(user);
+    refresh();
+    return null;
   }
 
   if (!currentUser) return <Navigate to="/home" />;
