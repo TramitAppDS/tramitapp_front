@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-duplicate-props */
 /* eslint-disable react/jsx-no-bind */
 import React, { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
@@ -151,7 +152,6 @@ export default function SolicitarTramite() {
               autoComplete="comentario"
               inputProps={{ maxLength: 200 }}
               autoFocus
-              inputProps={{ maxLength: 200 }}
             />
 
             <Button
