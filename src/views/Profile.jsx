@@ -1,7 +1,8 @@
 import React from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, Link } from "react-router-dom";
 import StarRatings from "react-star-ratings";
 import useAuth from "hooks/useAuth";
+import Button from "@mui/material/Button";
 
 export default function Profile() {
   const { currentUser } = useAuth();
@@ -46,6 +47,46 @@ export default function Profile() {
           <p className="is-size-5">
             <strong>Comuna: </strong>
             {currentUser.commune}
+          </p>
+
+          <br />
+
+          <p className="is-size-5">
+            <strong>Información de Pago</strong>
+          </p>
+
+          {currentUser.bank ? (
+            <div>
+              <p className="is-size-5">
+                <strong>Banco: </strong>
+                {currentUser.bank}
+              </p>
+
+              <p className="is-size-5">
+                <strong>Tipo de Cuenta: </strong>
+                {currentUser.accountType}
+              </p>
+
+              <p className="is-size-5">
+                <strong>Nro de Cuenta: </strong>
+                {currentUser.accountNumber}
+              </p>
+
+              <p className="is-size-5">
+                <strong>RUT: </strong>
+                {currentUser.rut}
+              </p>
+            </div>
+          ) : (
+            <p className="is-size-5"> Actualmente no presenta información de pago </p>
+          )}
+
+          <br />
+
+          <p>
+            <Button component={Link} to="/edit-payment-info" variant="contained">
+              Editar Datos de Pago
+            </Button>
           </p>
         </>
       )}

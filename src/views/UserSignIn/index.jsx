@@ -88,6 +88,7 @@ export default function SignIn() {
               name="email"
               autoComplete="email"
               autoFocus
+              inputProps={{ maxLength: 200 }}
             />
             <TextField
               margin="normal"
@@ -98,6 +99,7 @@ export default function SignIn() {
               type="password"
               id="password"
               autoComplete="current-password"
+              inputProps={{ maxLength: 200 }}
             />
             <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
               Continuar
