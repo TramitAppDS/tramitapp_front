@@ -151,7 +151,6 @@ export default function SolicitarTramite() {
               autoComplete="comentario"
               inputProps={{ maxLength: 200 }}
               autoFocus
-              inputProps={{ maxLength: 200 }}
             />
 
             <Button
